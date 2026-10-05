@@ -5,6 +5,7 @@ import com.example.order_managment.dto.OrderResponse;
 import com.example.order_managment.entity.Customer;
 import com.example.order_managment.entity.CustomerOrder;
 import com.example.order_managment.exception.CustomerNotFoundException;
+import com.example.order_managment.exception.OrderNotFoundException;
 import com.example.order_managment.repository.CustomerOrderRepository;
 import com.example.order_managment.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -21,14 +22,14 @@ public class OrderService {
 
     }
 
-    public String orderPlace(OrderRequest req){
+    public OrderResponse orderPlace(OrderRequest req){
         Customer customer = customerRepo.findById(req.getCustomer_id())
                 .orElseThrow(()->new CustomerNotFoundException("Invalid Customer Id"));
         CustomerOrder order = new CustomerOrder();
         order.setAmount(req.getAmount());
         order.setCustomer(customer);
         orderRepo.save(order);
-        return "Order Placed!!!";
+        return toResponse(order);
     }
 
     public List<OrderResponse> fetchOrderByCustomerId(Long customerId){
@@ -36,6 +37,12 @@ public class OrderService {
                 .stream().map(this::toResponse).toList();
     }
 
+    public OrderResponse fetchOrderByOrderId(Long orderId){
+        CustomerOrder order = orderRepo.findById(orderId)
+                .orElseThrow(()->new OrderNotFoundException("Invalid order id!!!"));
+
+        return toResponse(order);
+    }
     public OrderResponse toResponse(CustomerOrder order){
           OrderResponse orderResponse= new OrderResponse();
           orderResponse.setAmount(order.getAmount());
@@ -46,4 +53,6 @@ public class OrderService {
 
           return orderResponse;
     }
+
+
 }

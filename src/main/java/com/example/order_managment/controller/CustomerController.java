@@ -2,6 +2,8 @@ package com.example.order_managment.controller;
 
 import com.example.order_managment.dto.CustomerDto;
 import com.example.order_managment.service.CustomerService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +17,7 @@ public class CustomerController {
         this.customerService=customerService;
     }
     @PostMapping("/create")
-    public String createCustomer(@RequestBody CustomerDto dto){
-        return customerService.createCustomer(dto);
+    public ResponseEntity<String> createCustomer(@RequestBody CustomerDto dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.createCustomer(dto));
     }
 }

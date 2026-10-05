@@ -18,4 +18,10 @@ public class GlobalExceptionHandler {
     public String handleBadInput(IllegalArgumentException ex){
         return  ex.getMessage();
     }
+
+    @ExceptionHandler(OrderNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleOrderNotFound(OrderNotFoundException ex){
+        return ex.getMessage();
+    }
 }
