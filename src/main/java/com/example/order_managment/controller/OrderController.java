@@ -1,11 +1,11 @@
 package com.example.order_managment.controller;
 
 import com.example.order_managment.dto.OrderRequest;
+import com.example.order_managment.dto.OrderResponse;
 import com.example.order_managment.service.OrderService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/order")
@@ -19,4 +19,8 @@ public class OrderController {
            return orderService.orderPlace(req);
     }
 
+    @GetMapping("/getOrder/{customerId}")
+    public List<OrderResponse> getOrderByCustomerId(@PathVariable Long customerId){
+        return orderService.fetchOrderByCustomerId(customerId);
+    }
 }
