@@ -30,6 +30,18 @@ public class OrderController {
     @GetMapping("/getOrder/orderId/{orderId}")
     public OrderResponse getOrderByOrderId(@PathVariable Long orderId){
         return orderService.fetchOrderByOrderId(orderId);
-
     }
+
+    @PutMapping("/{orderId}/pay")
+    public OrderResponse payOrder(@PathVariable Long orderId){
+        return orderService.pay(orderId);
+    }
+
+    @PutMapping("/{orderId}/cancel")
+    public OrderResponse cancelOrder(@PathVariable Long orderId){
+        return orderService.cancel(orderId);
+    }
+
+
+
 }

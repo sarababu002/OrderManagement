@@ -12,6 +12,7 @@ public class CustomerOrder {
     @Id
     private Long order_id;
     private double amount;
+    @Enumerated(EnumType.STRING)
     private OrderStatus status=OrderStatus.PLACED;
     private LocalDateTime createdAt= LocalDateTime.now();
     @ManyToOne(fetch=FetchType.LAZY)
