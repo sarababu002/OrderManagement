@@ -6,6 +6,8 @@ import com.example.order_managment.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,30 +20,39 @@ public class OrderController {
         this.orderService=orderService;
     }
     @PostMapping("/place")
-    public ResponseEntity<OrderResponse> placeOrder(@RequestBody OrderRequest req){
-           return ResponseEntity.status(HttpStatus.CREATED).body(orderService.orderPlace(req));
+    public ResponseEntity<OrderResponse> placeOrder(@RequestBody OrderRequest req, Authentication auth){
+           return ResponseEntity.status(HttpStatus.CREATED).body(orderService.orderPlace(req, auth));
     }
-
+    @GetMapping("/getAllOrders")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<OrderResponse> getAll(){
+           return orderService.fetchAllOrder();
+    }
     @GetMapping("/getOrder/customerId/{customerId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<OrderResponse> getOrderByCustomerId(@PathVariable Long customerId){
         return orderService.fetchOrderByCustomerId(customerId);
     }
 
+    @GetMapping("/getOrders")
+    public List<OrderResponse> getOrdersByCustomer(Authentication auth){
+        return orderService.fetchAllOrderCustomer(auth);
+    }
+
     @GetMapping("/getOrder/orderId/{orderId}")
-    public OrderResponse getOrderByOrderId(@PathVariable Long orderId){
-        return orderService.fetchOrderByOrderId(orderId);
+    public OrderResponse getOrderByOrderId(@PathVariable Long orderId, Authentication auth){
+        return orderService.fetchOrderByOrderId(orderId, auth);
     }
 
     @PutMapping("/{orderId}/pay")
-    public OrderResponse payOrder(@PathVariable Long orderId){
-        return orderService.pay(orderId);
+    public OrderResponse payOrder(@PathVariable Long orderId, Authentication auth){
+        return orderService.pay(orderId, auth);
     }
 
     @PutMapping("/{orderId}/cancel")
-    public OrderResponse cancelOrder(@PathVariable Long orderId){
-        return orderService.cancel(orderId);
+    public OrderResponse cancelOrder(@PathVariable Long orderId, Authentication auth){
+        return orderService.cancel(orderId, auth);
     }
-
 
 
 }
