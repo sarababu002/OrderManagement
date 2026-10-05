@@ -1,5 +1,6 @@
-package com.example.order_managment;
+package com.example.order_managment.entity;
 
+import com.example.order_managment.OrderStatus;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
