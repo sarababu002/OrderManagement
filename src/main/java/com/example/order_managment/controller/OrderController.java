@@ -3,6 +3,7 @@ package com.example.order_managment.controller;
 import com.example.order_managment.dto.OrderRequest;
 import com.example.order_managment.dto.OrderResponse;
 import com.example.order_managment.service.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class OrderController {
         this.orderService=orderService;
     }
     @PostMapping("/place")
-    public ResponseEntity<OrderResponse> placeOrder(@RequestBody OrderRequest req, Authentication auth){
+    public ResponseEntity<OrderResponse> placeOrder(@Valid @RequestBody OrderRequest req, Authentication auth){
            return ResponseEntity.status(HttpStatus.CREATED).body(orderService.orderPlace(req, auth));
     }
     @GetMapping("/getAllOrders")
