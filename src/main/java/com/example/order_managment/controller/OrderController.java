@@ -1,11 +1,15 @@
 package com.example.order_managment.controller;
 
+import com.example.order_managment.PageResponse;
 import com.example.order_managment.dto.OrderRequest;
 import com.example.order_managment.dto.OrderResponse;
 import com.example.order_managment.service.OrderService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -26,8 +30,8 @@ public class OrderController {
     }
     @GetMapping("/getAllOrders")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<OrderResponse> getAll(){
-           return orderService.fetchAllOrder();
+    public PageResponse<OrderResponse> getAll(@PageableDefault(page = 0, size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable){
+           return orderService.fetchAllOrder(pageable);
     }
     @GetMapping("/getOrder/customerId/{customerId}")
     @PreAuthorize("hasRole('ADMIN')")

@@ -1,17 +1,19 @@
 package com.example.order_managment.service;
 
 import com.example.order_managment.OrderStatus;
+import com.example.order_managment.PageResponse;
 import com.example.order_managment.dto.OrderRequest;
 import com.example.order_managment.dto.OrderResponse;
 import com.example.order_managment.entity.Customer;
 import com.example.order_managment.entity.CustomerOrder;
 import com.example.order_managment.entity.User;
-import com.example.order_managment.exception.CustomerNotFoundException;
 import com.example.order_managment.exception.InvalidOrderStatusException;
 import com.example.order_managment.exception.OrderNotFoundException;
 import com.example.order_managment.repository.CustomerOrderRepository;
 import com.example.order_managment.repository.CustomerRepository;
 import com.example.order_managment.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -103,10 +105,10 @@ public class OrderService {
         order.setStatus(OrderStatus.CANCELLED);
         return toResponse(order);
     }
-    public List<OrderResponse> fetchAllOrder(){
-        return orderRepo.findAll()
-                .stream().map(this::toResponse).toList();
-
+    public PageResponse<OrderResponse> fetchAllOrder(Pageable pageable){
+        Page<OrderResponse> page = orderRepo.findAll(pageable)
+                .map(this::toResponse);
+        return PageResponse.from(page);
     }
     public List<OrderResponse> fetchAllOrderCustomer(Authentication auth){
         User user = userRepository.findByUsername(auth.getName())
