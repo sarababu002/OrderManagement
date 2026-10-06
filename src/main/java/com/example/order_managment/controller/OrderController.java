@@ -28,23 +28,23 @@ public class OrderController {
     public ResponseEntity<OrderResponse> placeOrder(@Valid @RequestBody OrderRequest req, Authentication auth){
            return ResponseEntity.status(HttpStatus.CREATED).body(orderService.orderPlace(req, auth));
     }
-    @GetMapping("/getAllOrders")
+    @GetMapping("/getAll")
     @PreAuthorize("hasRole('ADMIN')")
     public PageResponse<OrderResponse> getAll(@PageableDefault(page = 0, size = 5, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable){
            return orderService.fetchAllOrder(pageable);
     }
-    @GetMapping("/getOrder/customerId/{customerId}")
+    @GetMapping("/customer/{customerId}")
     @PreAuthorize("hasRole('ADMIN')")
     public List<OrderResponse> getOrderByCustomerId(@PathVariable Long customerId){
         return orderService.fetchOrderByCustomerId(customerId);
     }
 
-    @GetMapping("/getOrders")
+    @GetMapping("/my")
     public List<OrderResponse> getOrdersByCustomer(Authentication auth){
         return orderService.fetchAllOrderCustomer(auth);
     }
 
-    @GetMapping("/getOrder/orderId/{orderId}")
+    @GetMapping("/{orderId}")
     public OrderResponse getOrderByOrderId(@PathVariable Long orderId, Authentication auth){
         return orderService.fetchOrderByOrderId(orderId, auth);
     }
